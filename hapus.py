@@ -114,6 +114,33 @@ def funcinterpret(code):
                     else:
                         print("invalid token: " + tokens[2])
                         break
+                elif token == "realcmd":
+                    cmd = tokens[1]
+                    if cmd == "normal":
+                        finalcmd = " ".join(tokens[2:])
+                        subprocess.run(finalcmd, shell=True)
+                    else:
+                        finalcmd = variables.get(cmd)
+                        subprocess.run(finalcmd, shell=True)
+                elif token == "splitspaces":
+                    varname = tokens[1]
+                    keywordname = tokens[2]
+                    verifypart = tokens[3]
+                    funcname = tokens[4]
+                    splitedvalue = variables.get(varname).split() 
+                    if splitedvalue[int(verifypart)] == keywordname:
+                        funcinterpret("\n".join(functions.get(funcname)))
+                elif token == "joinvar":
+                    content = []
+                    varname1 = tokens[1]
+                    content.append(variables.get(varname1))
+                    if tokens[2] == ":":
+                        varname2 = tokens[3]
+                        content.append(variables.get(varname2))
+                        value = " ".join(content)
+                        if tokens[4] == ">>":
+                            varname = tokens[5]
+                            variables[varname] = value
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -267,13 +294,12 @@ def interpret(code):
                         tokenlist = []
                 elif token == "realcmd":
                     cmd = tokens[1]
-                    for var in variables:
-                        if cmd == var:
-                            finalcmd = variables.get(cmd)
-                            subprocess.run(finalcmd, shell=True)
-                        else:
-                            finalcmd = " ".join(tokens[1:])
-                            subprocess.run(finalcmd, shell=True)
+                    if cmd == "normal":
+                        finalcmd = " ".join(tokens[2:])
+                        subprocess.run(finalcmd, shell=True)
+                    else:
+                        finalcmd = variables.get(cmd)
+                        subprocess.run(finalcmd, shell=True)
                 elif token == "randnum":
                     if tokens[1] == ">":
                         varname = tokens[2]
@@ -302,6 +328,25 @@ def interpret(code):
                     else:
                         print("invalid token: " + tokens[2])
                         break
+                elif token == "splitspaces":
+                    varname = tokens[1]
+                    keywordname = tokens[2]
+                    verifypart = tokens[3]
+                    funcname = tokens[4]
+                    splitedvalue = variables.get(varname).split() 
+                    if splitedvalue[int(verifypart)] == keywordname:
+                        funcinterpret("\n".join(functions.get(funcname)))
+                elif token == "joinvar":
+                    content = []
+                    varname1 = tokens[1]
+                    content.append(variables.get(varname1))
+                    if tokens[2] == ":":
+                        varname2 = tokens[3]
+                        content.append(variables.get(varname2))
+                        value = " ".join(content)
+                        if tokens[4] == ">>":
+                            varname = tokens[5]
+                            variables[varname] = value
                 else:
                     print("main function not closed!")
                     break
@@ -328,6 +373,9 @@ def interpret(code):
                             funcinterpret(linne)
                     elif conditiontype == "<<":
                         if variables.get(varname1) < variables.get(varname2):
+                            funcinterpret(linne)
+                    elif conditiontype == "startswith":
+                        if variables.get(varname1).startswith(varname2):
                             funcinterpret(linne)
                 elif token == "if" and tokens[4] == "{":
                     conditiontype = tokens[2]
@@ -362,12 +410,21 @@ if __name__ == "__main__":
         print(f"usage: {sys.argv[0]} <cmd>")
         print("commands:")
         print("-v         version of the language")
+        print("-i         interactive mode")
         print("<file> your file")
         sys.exit()
 
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.0")
+        print("Hapus version: 1.1")
+    elif command == "-i":
+        running_while = True
+        print("'stop' to stop the interactive mode")
+        print("Hapus version 1.1")
+        print("made by: josé icaro. with: python")
+        while running_while:
+            code = input(">> ")
+            funcinterpret(code)
     else:
         execute_file(command)
