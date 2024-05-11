@@ -1,3 +1,46 @@
+func randomnumber {
+    randnum > num < > 1 , 10 <
+    talkvar >> num
+} func randomnumber
+
+// simple OS made with hapus
 use main {
-    talk >> hello!
+    string cmd1 = 1 " help "
+    string cmd2 = 1 " version "
+    string cmd3 = 1 " ld "
+    string cmd4 = 1 " python "
+    string cmd5 = 1 " shutdown "
+    string cmd6 = 1 " randomnumber "
+    while {
+        talk >> 
+        input command = 2 " NothingOS > "
+        if command == cmd1 {
+            talk >> commands:
+            talk >> help
+            talk >> ld
+            talk >> python
+            talk >> version
+            talk >> shutdown
+            talk >> randomnumber
+        } if
+        if command == cmd2 {
+            talk >> TonatuOS version: 1.0
+        } if
+        if command == cmd3 {
+            realcmd normal dir
+        } if
+        if command == cmd4 {
+            string python = 1 " python "
+            input file = 2 " file > "
+
+            joinvar python : file >> finalcmd4
+            realcmd finalcmd4
+        } if
+        if command == cmd5 {
+            stop
+        } if
+        if command == cmd6 {
+            callfunc ( randomnumber )
+        } if
+    } while
 } main
