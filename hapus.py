@@ -6,6 +6,17 @@ variables = {}
 functions = {}
 running_while = {"Trueorfalse": False}
 
+def debugtokens(code):
+    linenum = 0
+    lines = code.split("\n")
+
+    for line in lines:
+        tokens = line.split() or line.split("\t")
+
+        if tokens:
+            print("tokens:", tokens, "line:", linenum, "\n")
+            linenum += 1
+
 def funcinterpret(code):
     lines = code.split("\n")
     in_if = False
@@ -163,6 +174,33 @@ def funcinterpret(code):
                             variables[varname1] += variables.get(varname2)
                     else:
                         print("invalid token to separate the variables name: " + token[2])
+                elif token == "splitlines":
+                    varname = tokens[1]
+                    keywordname = tokens[2]
+                    verifypart = tokens[3]
+                    funcname = tokens[4]
+                    splitedvalue = variables.get(varname).split() 
+                    if splitedvalue[int(verifypart)] == keywordname:
+                        funcinterpret("\n".join(functions.get(funcname)))
+                elif token == "intinput":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        tokensize = tokens[3]
+                        finaltokensize = int(tokensize) + 5
+                        if tokens[4] == "\"":
+                            string = tokens[5:finaltokensize]
+                            if tokens[finaltokensize] == "\"":
+                                value = " ".join(string)
+                                variables[varname] = int(input(value))
+                            else:
+                                print("String not closed, invalid token: " + tokens[finaltokensize])
+                                break
+                        else:
+                            print("invalid token to open string: " + tokens[4])
+                            break
+                    else:
+                        print("invalid token: " + tokens[2])
+                        break
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -394,6 +432,33 @@ def interpret(code):
                             variables[varname1] += variables.get(varname2)
                     else:
                         print("invalid token to separate the variables name: " + token[2])
+                elif token == "splitlines":
+                    varname = tokens[1]
+                    keywordname = tokens[2]
+                    verifypart = tokens[3]
+                    funcname = tokens[4]
+                    splitedvalue = variables.get(varname).split() 
+                    if splitedvalue[int(verifypart)] == keywordname:
+                        funcinterpret("\n".join(functions.get(funcname)))
+                elif token == "intinput":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        tokensize = tokens[3]
+                        finaltokensize = int(tokensize) + 5
+                        if tokens[4] == "\"":
+                            string = tokens[5:finaltokensize]
+                            if tokens[finaltokensize] == "\"":
+                                value = " ".join(string)
+                                variables[varname] = int(input(value))
+                            else:
+                                print("String not closed, invalid token: " + tokens[finaltokensize])
+                                break
+                        else:
+                            print("invalid token to open string: " + tokens[4])
+                            break
+                    else:
+                        print("invalid token: " + tokens[2])
+                        break
                 else:
                     print("main function not closed!")
                     break
@@ -452,26 +517,38 @@ def execute_file(filename):
     else:
         print("use a .hap file extension")
 
+def debug_file(filename):
+    if filename.endswith(".hap"):
+        with open(filename, "r") as f:
+            content = f.read()
+        debugtokens(content)
+    else:
+        print("use a .hap file extension")
+
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) == 1:
         print(f"usage: {sys.argv[0]} <cmd>")
         print("commands:")
-        print("-v         version of the language")
-        print("-i         interactive mode")
-        print("<file> your file")
+        print("-v               version of the language")
+        print("-i               interactive mode")
+        print("-t <file>    debug the tokens")
+        print("<file>           executes your file")
         sys.exit()
 
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.2")
+        print("Hapus version: 1.3")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.2")
+        print("Hapus version 1.3")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
             funcinterpret(code)
+    elif command == "-t":
+        file = sys.argv[2]
+        debug_file(file)
     else:
         execute_file(command)
