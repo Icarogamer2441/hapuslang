@@ -30,10 +30,9 @@ use main {
             realcmd normal dir
         } if
         if command == cmd4 {
-            string python = 1 " python "
             input file = 2 " file > "
 
-            joinvar python : file >> finalcmd4
+            joinvar cmd4 : file >> finalcmd4
             realcmd finalcmd4
         } if
         if command == cmd5 {
