@@ -141,6 +141,28 @@ def funcinterpret(code):
                         if tokens[4] == ">>":
                             varname = tokens[5]
                             variables[varname] = value
+                elif token == "modifyintnum":   
+                    varname1 = tokens[1]
+                    if tokens[2] == "<":
+                        num = tokens[3]         
+                        if num == "normal":
+                            variables[varname1] += int(tokens[4])
+                        else:        
+                            varname2 = num
+                            variables[varname1] += variables.get(varname2)
+                    else:   
+                        print("invalid token to separate the variables name: " + token[2])
+                elif token == "modifyfloatnum":   
+                    varname1 = tokens[1]
+                    if tokens[2] == "<":
+                        num = tokens[3]         
+                        if num == "normal":
+                            variables[varname1] += float(tokens[4])
+                        else:
+                            varname2 = num
+                            variables[varname1] += variables.get(varname2)
+                    else:
+                        print("invalid token to separate the variables name: " + token[2])
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -163,6 +185,9 @@ def funcinterpret(code):
                             funcinterpret(linne)
                     elif conditiontype == "<<":
                         if variables.get(varname1) < variables.get(varname2):
+                            funcinterpret(linne)
+                    elif conditiontype == "startswith":
+                        if variables.get(varname1).startswith(varname2):
                             funcinterpret(linne)
                 elif token == "if" and tokens[4] == "{":
                     conditiontype = tokens[2]
@@ -347,6 +372,28 @@ def interpret(code):
                         if tokens[4] == ">>":
                             varname = tokens[5]
                             variables[varname] = value
+                elif token == "modifyintnum":   
+                    varname1 = tokens[1]
+                    if tokens[2] == "<":
+                        num = tokens[3]         
+                        if num == "normal":
+                            variables[varname1] += int(tokens[4])
+                        else:
+                            varname2 = num
+                            variables[varname1] += variables.get(varname2)
+                    else:
+                        print("invalid token to separate the variables name: " + token[2])
+                elif token == "modifyfloatnum":   
+                    varname1 = tokens[1]
+                    if tokens[2] == "<":
+                        num = tokens[3]         
+                        if num == "normal":
+                            variables[varname1] += float(tokens[4])
+                        else:
+                            varname2 = num
+                            variables[varname1] += variables.get(varname2)
+                    else:
+                        print("invalid token to separate the variables name: " + token[2])
                 else:
                     print("main function not closed!")
                     break
@@ -417,11 +464,11 @@ if __name__ == "__main__":
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.1")
+        print("Hapus version: 1.2")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.1")
+        print("Hapus version 1.2")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
