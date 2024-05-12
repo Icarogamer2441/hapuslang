@@ -175,13 +175,10 @@ def funcinterpret(code):
                     else:
                         print("invalid token to separate the variables name: " + token[2])
                 elif token == "splitlines":
-                    varname = tokens[1]
-                    keywordname = tokens[2]
-                    verifypart = tokens[3]
-                    funcname = tokens[4]
-                    splitedvalue = variables.get(varname).split() 
-                    if splitedvalue[int(verifypart)] == keywordname:
-                        funcinterpret("\n".join(functions.get(funcname)))
+                    varname1 = tokens[1]
+                    varname2 = tokens[2]
+                    splitedvalue = variables.get(varname).split("\n") 
+                    variables[varname2] = splitedvalue
                 elif token == "intinput":
                     varname = tokens[1]
                     if tokens[2] == "=":
@@ -241,6 +238,28 @@ def funcinterpret(code):
                         with open(file, "a") as fi:
                             content = variables.get(varname)
                             fi.write(content)
+                elif token == "strlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = items
+                elif token == "intlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = int(items)
+                elif token == "floatlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = float(items)
+                elif token == "getlistitem":
+                    listvarname = tokens[1]
+                    if tokens[2] == ":":
+                        listnum = tokens[3]
+                        if tokens[4] == ">>":
+                            outputvarname = tokens[5]
+                            variables[outputvarname] = variables.get(listvarname[int(listnum)])
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -473,13 +492,10 @@ def interpret(code):
                     else:
                         print("invalid token to separate the variables name: " + token[2])
                 elif token == "splitlines":
-                    varname = tokens[1]
-                    keywordname = tokens[2]
-                    verifypart = tokens[3]
-                    funcname = tokens[4]
-                    splitedvalue = variables.get(varname).split() 
-                    if splitedvalue[int(verifypart)] == keywordname:
-                        funcinterpret("\n".join(functions.get(funcname)))
+                    varname1 = tokens[1]
+                    varname2 = tokens[2]
+                    splitedvalue = variables.get(varname).split("\n") 
+                    variables[varname2] = splitedvalue
                 elif token == "intinput":
                     varname = tokens[1]
                     if tokens[2] == "=":
@@ -539,6 +555,28 @@ def interpret(code):
                         with open(file, "a") as fi:
                             content = variables.get(varname)
                             fi.write(content)
+                elif token == "strlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = items
+                elif token == "intlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = int(items)
+                elif token == "floatlist":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        items = tokens[3:]
+                        variables[varname] = float(items)
+                elif token == "getlistitem":
+                    listvarname = tokens[1]
+                    if tokens[2] == ":":
+                        listnum = tokens[3]
+                        if tokens[4] == ">>":
+                            outputvarname = tokens[5]
+                            variables[outputvarname] = variables.get(listvarname[int(listnum)])
                 else:
                     print("main function not closed!")
                     break
@@ -618,11 +656,11 @@ if __name__ == "__main__":
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.4")
+        print("Hapus version: 1.5")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.4")
+        print("Hapus version 1.5")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
