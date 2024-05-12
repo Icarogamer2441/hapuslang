@@ -201,6 +201,46 @@ def funcinterpret(code):
                     else:
                         print("invalid token: " + tokens[2])
                         break
+                elif token == "floatinput":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        tokensize = tokens[3]
+                        finaltokensize = int(tokensize) + 5
+                        if tokens[4] == "\"":
+                            string = tokens[5:finaltokensize]
+                            if tokens[finaltokensize] == "\"":
+                                value = " ".join(string)
+                                variables[varname] = int(input(value))
+                            else:
+                                print("String not closed, invalid token: " + tokens[finaltokensize])
+                                break
+                        else:
+                            print("invalid token to open string: " + tokens[4])
+                            break
+                    else:
+                        print("invalid token: " + tokens[2])
+                        break
+                elif token == "readfile":
+                    file = tokens[1]
+                    if tokens[2] == ">>":
+                        varname = tokens[3]
+                        with open(file, "r") as fi:
+                            content = fi.read()
+                        variables[varname] = content
+                elif token == "writefile":
+                    file = tokens[1]
+                    if tokens[2] == "<<":
+                        varname = tokens[3]
+                        with open(file, "w") as fi:
+                            content = variables.get(varname)
+                            fi.write(content)
+                elif token == "appendfile":
+                    file = tokens[1]
+                    if tokens[2] == "<<":
+                        varname = tokens[3]
+                        with open(file, "a") as fi:
+                            content = variables.get(varname)
+                            fi.write(content)
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -459,6 +499,46 @@ def interpret(code):
                     else:
                         print("invalid token: " + tokens[2])
                         break
+                elif token == "floatinput":
+                    varname = tokens[1]
+                    if tokens[2] == "=":
+                        tokensize = tokens[3]
+                        finaltokensize = int(tokensize) + 5
+                        if tokens[4] == "\"":
+                            string = tokens[5:finaltokensize]
+                            if tokens[finaltokensize] == "\"":
+                                value = " ".join(string)
+                                variables[varname] = int(input(value))
+                            else:
+                                print("String not closed, invalid token: " + tokens[finaltokensize])
+                                break
+                        else:
+                            print("invalid token to open string: " + tokens[4])
+                            break
+                    else:
+                        print("invalid token: " + tokens[2])
+                        break
+                elif token == "readfile":
+                    file = tokens[1]
+                    if tokens[2] == ">>":
+                        varname = tokens[3]
+                        with open(file, "r") as fi:
+                            content = fi.read()
+                        variables[varname] = content
+                elif token == "writefile":
+                    file = tokens[1]
+                    if tokens[2] == "<<":
+                        varname = tokens[3]
+                        with open(file, "w") as fi:
+                            content = variables.get(varname)
+                            fi.write(content)
+                elif token == "appendfile":
+                    file = tokens[1]
+                    if tokens[2] == "<<":
+                        varname = tokens[3]
+                        with open(file, "a") as fi:
+                            content = variables.get(varname)
+                            fi.write(content)
                 else:
                     print("main function not closed!")
                     break
@@ -538,11 +618,11 @@ if __name__ == "__main__":
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.3")
+        print("Hapus version: 1.4")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.3")
+        print("Hapus version 1.4")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
