@@ -302,7 +302,7 @@ def interpret(code):
                     tokenlist = []
             elif token == "imp":
                 file = tokens[1]
-                with open(file + "hap", "r") as fi:
+                with open(file + ".hap", "r") as fi:
                     content = fi.read()
                 interpret(content)
             
