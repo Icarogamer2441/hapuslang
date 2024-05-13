@@ -324,7 +324,12 @@ def interpret(code):
                 with open(file + ".hap", "r") as fi:
                     content = fi.read()
                 interpret(content)
-            
+            elif token == "lib":
+                libfile = tokens[1]
+                with open(f"haplibs/{libfile}.hap", "r") as fi:
+                    content = fi.read()
+                interpret(content)
+                
             if in_normal_func:
                 if token == "}" and tokens[1] == "func":
                     funcname = tokens[2]
@@ -656,11 +661,11 @@ if __name__ == "__main__":
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.5")
+        print("Hapus version: 1.6")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.5")
+        print("Hapus version 1.6")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
