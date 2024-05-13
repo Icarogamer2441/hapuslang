@@ -1,0 +1,3 @@
+use main {
+    int n1 = 10
+} main
