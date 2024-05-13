@@ -1,0 +1,6 @@
+lib lib1
+
+use main {
+    talk >> hello world!
+    talkvar >> n1
+} main
