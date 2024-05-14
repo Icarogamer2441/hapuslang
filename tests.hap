@@ -3,4 +3,14 @@ lib lib1
 use main {
     talk >> hello world!
     talkvar >> n1
+    int b = 0
+
+    for 10 {
+        talk >> aaaa
+    } for
+    for 10 {
+        modifyintnum b < normal 1
+        talkvar >> b
+        talk >> 
+    } for
 } main
