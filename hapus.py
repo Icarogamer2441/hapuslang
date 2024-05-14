@@ -28,7 +28,7 @@ def funcinterpret(code):
         if tokens:
             token = tokens[0]
 
-            if in_if == False:
+            if not in_if:
                 if token == "talk" and tokens[1] == ">>":
                     msg = tokens[2:]
                     print(" ".join(msg))
@@ -260,6 +260,14 @@ def funcinterpret(code):
                         if tokens[4] == ">>":
                             outputvarname = tokens[5]
                             variables[outputvarname] = variables.get(listvarname[int(listnum)])
+                elif token == "utalk":
+                    if tokens[1] == ">>":
+                        msgs = tokens[2:]
+                        print(" ".join(msgs), end="")
+                elif token == "utalkvar":
+                    if tokens[1] == ">>":
+                        varname = tokens[2]
+                        print(variables.get(varname), end="")
 
             if in_if:
                 if token == "}" and tokens[1] == "if":
@@ -299,9 +307,13 @@ def interpret(code):
     in_normal_func = False
     in_if = False
     in_while = False
+    in_for = False
+    initialnumber = 0
+    finalnumber = 1
     conditiontype = ""
     varname1 = ""
     varname2 = ""
+    times = 1
     tokenlist = []
 
     for line in lines:
@@ -582,6 +594,20 @@ def interpret(code):
                         if tokens[4] == ">>":
                             outputvarname = tokens[5]
                             variables[outputvarname] = variables.get(listvarname[int(listnum)])
+                elif token == "for":
+                    times = tokens[1]
+                    if tokens[2] == "{":
+                        in_for = True
+                        in_main_func = False
+                        tokenlist = []
+                elif token == "utalk":
+                    if tokens[1] == ">>":
+                        msgs = tokens[2:]
+                        print(" ".join(msgs), end="")
+                elif token == "utalkvar":
+                    if tokens[1] == ">>":
+                        varname = tokens[2]
+                        print(variables.get(varname), end="")
                 else:
                     print("main function not closed!")
                     break
@@ -621,14 +647,21 @@ def interpret(code):
 
             if in_while:
                 if token == "}" and tokens[1] == "while":
-                    in_while = False
                     linne = "\n".join(tokenlist)
                     while running_while["Trueorfalse"]:
                         funcinterpret(linne)
+                    in_while = False
                     in_main_func = True
-                    
-                elif token == "while" and tokens[1] == "{":
-                    continue
+                else:
+                    tokenlist.append(" ".join(tokens[0:]))
+            
+            if in_for:
+                if token == "}" and tokens[1] == "for":
+                    linnes = "\n".join(tokenlist)
+                    for i in range(int(times)):
+                        funcinterpret(linnes)
+                    in_for = False
+                    in_main_func = True
                 else:
                     tokenlist.append(" ".join(tokens[0:]))
 
@@ -661,11 +694,11 @@ if __name__ == "__main__":
     command = sys.argv[1]
 
     if command == "-v":
-        print("Hapus version: 1.6")
+        print("Hapus version: 1.7")
     elif command == "-i":
         running_while = True
         print("'stop' to stop the interactive mode")
-        print("Hapus version 1.6")
+        print("Hapus version 1.7")
         print("made by: josé icaro. with: python")
         while running_while:
             code = input(">> ")
